@@ -17,15 +17,23 @@ Including another URLconf
 
 from django.contrib import admin
 from django.urls import path, include
+from django.views.decorators.csrf import csrf_exempt, ensure_csrf_cookie
+from rest_framework.decorators import api_view
 
 from django.conf import settings
 from django.conf.urls.static import static
 
 
+@ensure_csrf_cookie
+@api_view(['GET'])
+def get_csrf_token(request):
+    return response.Response({'detail': 'CSRF cookie set'})
 
 urlpatterns = [
+    path('get-csrf-token/', get_csrf_token, name='get_csrf_token'),
     path('admin/', admin.site.urls),
     path('', include('chat.urls')),
+    path('', include('zauth.urls')),
 ]
 
 if settings.DEBUG:

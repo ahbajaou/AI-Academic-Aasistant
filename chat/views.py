@@ -1,8 +1,8 @@
 from django.http import JsonResponse
-from django.views.decorators.csrf import csrf_exempt
 import json
 from .ai_agent import get_response
 from .models import ChatMessage
+from django.views.decorators.csrf import csrf_exempt
 
 @csrf_exempt
 def chat(request):
