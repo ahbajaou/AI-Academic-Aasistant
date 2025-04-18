@@ -33,10 +33,16 @@ ALLOWED_HOSTS = ['*']
 
 
 # Application definition
+CORS_ALLOWED_ORIGINS = [
+    'http://localhost:5173',  # Add your frontend’s URL
+
+]
 
 INSTALLED_APPS = [
     "chat",
     'rest_framework',
+    'corsheaders',
+    'chat.apps.ChatConfig',
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -53,6 +59,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    'corsheaders.middleware.CorsMiddleware',
 ]
 
 ROOT_URLCONF = "ai_agent.urls"
