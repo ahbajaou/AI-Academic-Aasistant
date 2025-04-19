@@ -9,6 +9,7 @@ def chat(request):
     if request.method == 'POST':
         try:
             data = json.loads(request.body)
+            print("Received data:", data)  # Debugging line
             message = data.get('message', '')
             if not message:
                 return JsonResponse({"error": "No message provided"}, status=400)
