@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # OPENAI_API_KEY = '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'
 # openai.api_key = OPENAI_API_KEY
@@ -24,12 +25,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-#@u-3(b@3m=5mq3%rycp_d^a@to28b$elpz26xxd@siwk&stir"
+SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'your-default-development-secret-key')  # Add a default for local dev if needed
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get('DJANGO_DEBUG', 'False') == 'True'
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = os.environ.get('DJANGO_ALLOWED_HOSTS', '127.0.0.1,localhost').split(',')
+# In Vercel env vars, set DJANGO_ALLOWED_HOSTS=your-project-name.vercel.app,yourdomain.com
 
 
 # Application definition
@@ -86,11 +88,21 @@ WSGI_APPLICATION = "ai_agent.wsgi.application"
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.environ.get('DB_NAME'),
+        'USER': os.environ.get('DB_USER'),
+        'PASSWORD': os.environ.get('DB_PASSWORD'),
+        'HOST': os.environ.get('DB_HOST'),
+        'PORT': os.environ.get('DB_PORT', '5432'), # Default PG port
+        # Add SSL require if needed by your provider
+        # 'OPTIONS': {
+        #     'sslmode': 'require',
+        # },
     }
 }
+# Make sure to install the necessary database driver, e.g., psycopg2-binary
+# Add 'psycopg2-binary' to requirements.txt
 
 
 # Password validation
@@ -127,7 +139,13 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
-STATIC_URL = "static/"
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles_build', 'static') # Matches vercel.json output dir
+
+# Optional: If you have static files outside your apps' static/ directories
+# STATICFILES_DIRS = [
+#     os.path.join(BASE_DIR, 'static'),
+# ]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
@@ -140,5 +158,5 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'chebchoub1337@gmail.com'  # Replace with your email
-EMAIL_HOST_PASSWORD = 'mari rvbi lqrv clrf'  # Replace with your app password
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD') # Get password from environment variable
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER

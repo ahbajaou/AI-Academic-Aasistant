@@ -1,0 +1,10 @@
+.git
+.vscode
+venv_clean/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+db.sqlite3
+*.log
+.env
