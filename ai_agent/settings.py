@@ -25,10 +25,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'your-default-development-secret-key')  # Add a default for local dev if needed
+   # Add a default for local dev if needed
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get('DJANGO_DEBUG', 'False') == 'True'
+DEBUG = 'False'
 
 ALLOWED_HOSTS = os.environ.get('DJANGO_ALLOWED_HOSTS', '127.0.0.1,localhost').split(',')
 # In Vercel env vars, set DJANGO_ALLOWED_HOSTS=your-project-name.vercel.app,yourdomain.com
@@ -90,10 +90,10 @@ WSGI_APPLICATION = "ai_agent.wsgi.application"
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.environ.get('DB_NAME'),
-        'USER': os.environ.get('DB_USER'),
-        'PASSWORD': os.environ.get('DB_PASSWORD'),
-        'HOST': os.environ.get('DB_HOST'),
+        'NAME': os.environ.get('DB_NAME', 'urianted'),
+        'USER': os.environ.get('DB_USER', 'urianted'),
+        'PASSWORD': os.environ.get('DB_PASSWORD', '123456'),
+        'HOST': os.environ.get('DB_HOST', 'localhost'), # Use 'localhost' for local dev
         'PORT': os.environ.get('DB_PORT', '5432'), # Default PG port
         # Add SSL require if needed by your provider
         # 'OPTIONS': {
@@ -158,5 +158,6 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'chebchoub1337@gmail.com'  # Replace with your email
-EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD') # Get password from environment variable
+EMAIL_HOST_PASSWORD = 'mari rvbi lqrv clrf'  # Replace with your app password
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+SECRET_KEY = '1bto3bsC02KvDNriR9Pr_uCBYmumCNJFAzgLe07GNG0bPYtPdxQjRrgFfsjg9U-zvl4'
