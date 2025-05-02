@@ -28,9 +28,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
    # Add a default for local dev if needed
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = 'False'
+DEBUG = True
 
-ALLOWED_HOSTS = os.environ.get('DJANGO_ALLOWED_HOSTS','aiagent.vercel.app').split(',')
+# ALLOWED_HOSTS = os.environ.get('DJANGO_ALLOWED_HOSTS','aiagent.vercel.app').split(',')
+ALLOWED_HOSTS = os.environ.get('DJANGO_ALLOWED_HOSTS','localhost').split(',')
+
 # In Vercel env vars, set DJANGO_ALLOWED_HOSTS=your-project-name.vercel.app,yourdomain.com
 
 
@@ -45,6 +47,7 @@ INSTALLED_APPS = [
     'zauth',
     'rest_framework',
     'corsheaders',
+    'drf_yasg',  # Added for Swagger/OpenAPI documentation
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -89,18 +92,25 @@ WSGI_APPLICATION = "ai_agent.wsgi.application"
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.environ.get('DB_NAME', 'urianted'),
-        'USER': os.environ.get('DB_USER', 'urianted'),
-        'PASSWORD': os.environ.get('DB_PASSWORD', '123456'),
-        'HOST': os.environ.get('DB_HOST', 'localhost'), # Use 'localhost' for local dev
-        'PORT': os.environ.get('DB_PORT', '5432'), # Default PG port
-        # Add SSL require if needed by your provider
-        # 'OPTIONS': {
-        #     'sslmode': 'require',
-        # },
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+# Commented out PostgreSQL config for reference
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': os.environ.get('DB_NAME', 'urianted'),
+#         'USER': os.environ.get('DB_USER', 'urianted'),
+#         'PASSWORD': os.environ.get('DB_PASSWORD', '123456'),
+#         'HOST': os.environ.get('DB_HOST', 'localhost'), # Use 'localhost' for local dev
+#         'PORT': os.environ.get('DB_PORT', '5432'), # Default PG port
+#         # Add SSL require if needed by your provider
+#         # 'OPTIONS': {
+#         #     'sslmode': 'require',
+#         # },
+#     }
+# }
 # Make sure to install the necessary database driver, e.g., psycopg2-binary
 # Add 'psycopg2-binary' to requirements.txt
 

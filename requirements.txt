@@ -6,3 +6,4 @@ langchain-google-genai
 google-generativeai
 psycopg2-binary # Example for PostgreSQL
 # gunicorn # Might be needed depending on exact Vercel setup/runtime version
+drf-yasg  # For Swagger/OpenAPI documentation
