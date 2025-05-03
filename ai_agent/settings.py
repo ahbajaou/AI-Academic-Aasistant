@@ -95,21 +95,22 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+
 # Commented out PostgreSQL config for reference
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.environ.get('DB_NAME', 'urianted'),
-        'USER': os.environ.get('DB_USER', 'urianted'),
-        'PASSWORD': os.environ.get('DB_PASSWORD', '123456'),
-        'HOST': os.environ.get('DB_HOST', 'localhost'), # Use 'localhost' for local dev
-        'PORT': os.environ.get('DB_PORT', '5432'), # Default PG port
-        # Add SSL require if needed by your provider
-        # 'OPTIONS': {
-        #     'sslmode': 'require',
-        # },
-    }
-}
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': os.environ.get('DB_NAME', 'urianted'),
+#         'USER': os.environ.get('DB_USER', 'urianted'),
+#         'PASSWORD': os.environ.get('DB_PASSWORD', '123456'),
+#         'HOST': os.environ.get('DB_HOST', 'localhost'), # Use 'localhost' for local dev
+#         'PORT': os.environ.get('DB_PORT', '5432'), # Default PG port
+#         # Add SSL require if needed by your provider
+#         # 'OPTIONS': {
+#         #     'sslmode': 'require',
+#         # },
+#     }
+# }
 # Make sure to install the necessary database driver, e.g., psycopg2-binary
 # Add 'psycopg2-binary' to requirements.txt
 
