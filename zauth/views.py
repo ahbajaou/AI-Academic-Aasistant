@@ -7,6 +7,10 @@ from .isStrong import validate_passwd
 import bcrypt, string, random
 from django.views.decorators.csrf import csrf_exempt
 # from ai.models import conversations
+from drf_yasg.utils import swagger_auto_schema
+from drf_yasg import openapi
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
 
 def is_auth_user(access_token, refresh_token=""):
     try:
@@ -20,6 +24,28 @@ def generate_tokens(email):
                            (string.digits + string.ascii_uppercase + string.ascii_lowercase, k=100))
     return {'identity': email, 'access_token': access_token}
 
+@swagger_auto_schema(
+    method='post',
+    operation_description="User Sign Up",
+    request_body=openapi.Schema(
+        type=openapi.TYPE_OBJECT,
+        properties={
+            'username': openapi.Schema(type=openapi.TYPE_STRING, description='Username'),
+            'password': openapi.Schema(type=openapi.TYPE_STRING, description='Password')
+        },
+        required=['username', 'password']
+    ),
+    responses={
+        200: openapi.Response(
+            description="User signed up successfully",
+            examples={
+                "application/json": {
+                    "message": "User signed up successfully"
+                }
+            }
+        )
+    }
+)
 @decorators.api_view(["POST"])
 def signup(req):
     serial = auth_db_serial(data=req.data)
@@ -75,37 +101,97 @@ def signup(req):
         return response.Response(status=status.HTTP_201_CREATED)
     return response.Response(serial.errors, status=status.HTTP_400_BAD_REQUEST)
 
+@swagger_auto_schema(
+    method='post',
+    operation_description="Account Verification",
+    request_body=openapi.Schema(
+        type=openapi.TYPE_OBJECT,
+        properties={
+            'email': openapi.Schema(type=openapi.TYPE_STRING, description='Email address'),
+            'verification_code': openapi.Schema(type=openapi.TYPE_STRING, description='Verification code')
+        },
+        required=['email', 'verification_code']
+    ),
+    responses={
+        200: openapi.Response(
+            description="Account verified successfully",
+            examples={
+                "application/json": {
+                    "message": "Account verified successfully"
+                }
+            }
+        ),
+        400: openapi.Response(
+            description="Bad Request",
+            examples={
+                "application/json": {
+                    "Activation Failed": "Invalid Information",
+                    "email": "This Field Required",
+                    "verification_code": "This Field Required"
+                }
+            }
+        )
+    }
+)
 @decorators.api_view(["POST"])
 def verify(req):
     try:
-        user = verificationSystem.objects.get(identity=req.data.get('email'))
+        # Validate required fields
+        email = req.data.get('email')
         code = req.data.get('verification_code')
-        if code is None:
-            raise Exception("")
-        if user.ActivationCode == req.data.get('verification_code'):
+
+        if not email or not code:
+            return response.Response({
+                'Activation Failed': 'Invalid Information',
+                'email': 'This Field Required' if not email else '',
+                'verification_code': 'This Field Required' if not code else ''
+            }, status=status.HTTP_400_BAD_REQUEST)
+
+        # Fetch user from verification system
+        user = verificationSystem.objects.get(identity=email)
+
+        # Check if the verification code matches
+        if user.ActivationCode == code:
             activateUser = auth_db.objects.get(email=user.identity)
             activateUser.activation = True
             activateUser.save()
             user.delete()
-            # try:
-            #     AddUserTopics = conversations.objects.create(identity=req.data.get('email'), topics=dict())
-            #     AddUserTopics.save()
-            # except Exception as e:
-            #     print(e)
             return response.Response({
-                'Activation': 'Succefull Activation', 'Email': activateUser.email},
-                status=status.HTTP_200_OK)
+                'Activation': 'Successful Activation',
+                'Email': activateUser.email
+            }, status=status.HTTP_200_OK)
         else:
             return response.Response({'verification_code': 'Invalid Code'},
                                      status=status.HTTP_400_BAD_REQUEST)
-    except:
-        pass
-    return response.Response({'Activation Failed': 'Invalid Information',
-                              'email': 'This Field Reqiured',
-                              'verification_code': 'This Field Reqiured'
-                              }
-                              , status=status.HTTP_400_BAD_REQUEST)
+    except verificationSystem.DoesNotExist:
+        return response.Response({'Activation Failed': 'Invalid Information'},
+                                 status=status.HTTP_400_BAD_REQUEST)
+    except Exception as e:
+        return response.Response({'Error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
+@swagger_auto_schema(
+    method='post',
+    operation_description="User Sign In",
+    request_body=openapi.Schema(
+        type=openapi.TYPE_OBJECT,
+        properties={
+            'username': openapi.Schema(type=openapi.TYPE_STRING, description='Username'),
+            'password': openapi.Schema(type=openapi.TYPE_STRING, description='Password')
+        },
+        required=['username', 'password']
+    ),
+    responses={
+        200: openapi.Response(
+            description="User signed in successfully",
+            examples={
+                "application/json": {
+                    "message": "User signed in successfully",
+                    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+                }
+            }
+        )
+    }
+)
 @decorators.api_view(["POST"])
 def signin(req):
     try:

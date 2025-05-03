@@ -23,6 +23,7 @@ from rest_framework.response import Response
 from rest_framework import permissions
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
+from drf_yasg.utils import swagger_auto_schema
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -41,6 +42,20 @@ schema_view = get_schema_view(
     permission_classes=(permissions.AllowAny,),
 )
 
+@swagger_auto_schema(
+    method='get',
+    operation_description="Get CSRF token",
+    responses={
+        200: openapi.Response(
+            description="CSRF token set",
+            examples={
+                "application/json": {
+                    "detail": "CSRF cookie set"
+                }
+            }
+        )
+    }
+)
 @ensure_csrf_cookie
 @api_view(['GET'])
 def get_csrf_token(request):

@@ -28,10 +28,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
    # Add a default for local dev if needed
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-# ALLOWED_HOSTS = os.environ.get('DJANGO_ALLOWED_HOSTS','aiagent.vercel.app').split(',')
-ALLOWED_HOSTS = os.environ.get('DJANGO_ALLOWED_HOSTS','localhost').split(',')
+ALLOWED_HOSTS = ['.vercel.app', '.now.sh', 'localhost', '127.0.0.1']
 
 # In Vercel env vars, set DJANGO_ALLOWED_HOSTS=your-project-name.vercel.app,yourdomain.com
 
@@ -97,20 +96,20 @@ DATABASES = {
     }
 }
 # Commented out PostgreSQL config for reference
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': os.environ.get('DB_NAME', 'urianted'),
-#         'USER': os.environ.get('DB_USER', 'urianted'),
-#         'PASSWORD': os.environ.get('DB_PASSWORD', '123456'),
-#         'HOST': os.environ.get('DB_HOST', 'localhost'), # Use 'localhost' for local dev
-#         'PORT': os.environ.get('DB_PORT', '5432'), # Default PG port
-#         # Add SSL require if needed by your provider
-#         # 'OPTIONS': {
-#         #     'sslmode': 'require',
-#         # },
-#     }
-# }
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.environ.get('DB_NAME', 'urianted'),
+        'USER': os.environ.get('DB_USER', 'urianted'),
+        'PASSWORD': os.environ.get('DB_PASSWORD', '123456'),
+        'HOST': os.environ.get('DB_HOST', 'localhost'), # Use 'localhost' for local dev
+        'PORT': os.environ.get('DB_PORT', '5432'), # Default PG port
+        # Add SSL require if needed by your provider
+        # 'OPTIONS': {
+        #     'sslmode': 'require',
+        # },
+    }
+}
 # Make sure to install the necessary database driver, e.g., psycopg2-binary
 # Add 'psycopg2-binary' to requirements.txt
 
@@ -156,6 +155,9 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 # STATICFILES_DIRS = [
 #     os.path.join(BASE_DIR, 'static'),
 # ]
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static'),
+]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
@@ -168,6 +170,6 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'chebchoub1337@gmail.com'  # Replace with your email
-EMAIL_HOST_PASSWORD = 'mari rvbi lqrv clrf'  # Replace with your app password
+EMAIL_HOST_PASSWORD = 'mirz cpdv uzxi rwkc'  # Replace with your app password
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 SECRET_KEY = '1bto3bsC02KvDNriR9Pr_uCBYmumCNJFAzgLe07GNG0bPYtPdxQjRrgFfsjg9U-zvl4'

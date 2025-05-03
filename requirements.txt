@@ -1,9 +1,9 @@
-Django
+django
 djangorestframework
 django-cors-headers
 bcrypt
 langchain-google-genai
 google-generativeai
 psycopg2-binary # Example for PostgreSQL
-# gunicorn # Might be needed depending on exact Vercel setup/runtime version
+gunicorn
 drf-yasg  # For Swagger/OpenAPI documentation
