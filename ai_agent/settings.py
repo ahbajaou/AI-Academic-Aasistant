@@ -28,18 +28,19 @@ BASE_DIR = Path(__file__).resolve().parent.parent
    # Add a default for local dev if needed
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
 # In Vercel env vars, set DJANGO_ALLOWED_HOSTS=your-project-name.vercel.app,yourdomain.com
 
-
+ALLOWED_METHODS = ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS']
 # Application definition
 CORS_ALLOWED_ORIGINS = [
-    'http://localhost:5173',  # Add your frontend’s URL
-
+    'http://localhost:5173',  # Add your frontend's URL
+    'http://127.0.0.1:5173',  # Add this line for the 127.0.0.1 origin
 ]
+CORS_ALLOW_ALL_ORIGINS = True  # Only use this for development!
 
 INSTALLED_APPS = [
     "chat",
@@ -56,6 +57,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -63,7 +65,6 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    'corsheaders.middleware.CorsMiddleware',
 ]
 
 ROOT_URLCONF = "ai_agent.urls"
